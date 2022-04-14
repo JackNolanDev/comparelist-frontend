@@ -1,4 +1,4 @@
-# comparelist
+# compare-list
 
 ## Project setup
 ```
