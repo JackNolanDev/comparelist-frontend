@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-on:keyup.esc="hideModal()">
     <div class="container page">
       <h1 class="display-2 text-center mt-2">Compare List</h1>
       <label for="active-list-sel" class="form-label">
@@ -10,11 +10,14 @@
         <option value="hardcoverNonfiction">Hardcover Nonfiction</option>
         <option value="paperbackFiction">Paperback Fiction</option>
         <option value="paperbackNonfiction">Paperback NonFiction</option>
+        <option value="massMarket">Mass Market</option>
+        <option value="pictureBook">Picture Books</option>
       </select>
       <div class="row mt-5 mb-5">
         <div
           v-for="(sublist, name) in filteredLists"
           v-bind:key="name"
+          class="col-12"
           v-bind:class="colClass"
         >
           <h4>{{ sublist.disp }}</h4>
@@ -44,14 +47,14 @@
                 v-bind:src="book.image"
                 v-bind:alt="'Cover for ' + book.title"
                 height="150px"
+                onerror="this.style.display='none'"
               />
             </button>
           </div>
-          <p>
-            TODO: I think it would be nice to have some blurb here describing
-            generally how different sources get their information and why the
-            lists may be so different.
+          <p class="text-muted mt-4">
+            This list updates {{ sublist[activeList].rate }}.
           </p>
+          <list-details :list="name" />
         </div>
       </div>
       <compare-book :given="selectedBook" @toggleVisible="hideModal" />
@@ -63,14 +66,15 @@
 <script>
 import { mapState } from "vuex";
 import CompareBook from "./CompareBook.vue";
+import ListDetails from "./ListDetails.vue";
 import PageFooter from "./PageFooter.vue";
 export default {
-  components: { PageFooter, CompareBook },
+  components: { PageFooter, CompareBook, ListDetails },
   name: "CompareList",
   data() {
     return {
       activeList: "hardcoverFiction",
-      selectedBook: {},
+      selectedBook: undefined,
     };
   },
   computed: {
@@ -87,7 +91,7 @@ export default {
       return l;
     },
     colClass() {
-      return "col-" + parseInt(12 / Object.keys(this.filteredLists).length);
+      return "col-xl-" + parseInt(12 / Object.keys(this.filteredLists).length);
     },
   },
   methods: {
@@ -98,7 +102,7 @@ export default {
       this.selectedBook = book;
     },
     hideModal() {
-      this.selectedBook = {};
+      this.selectedBook = undefined;
     },
   },
 };
