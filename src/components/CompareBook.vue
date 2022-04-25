@@ -85,15 +85,15 @@ export default {
           list.books.forEach((book) => {
             if (
               stringSimilarity.compareTwoStrings(book.title, this.given.title) >
-                0.3 &&
+                0.32 &&
               stringSimilarity.compareTwoStrings(
                 book.author,
                 this.given.author
-              ) > 0.3 &&
+              ) > 0.32 &&
               stringSimilarity.compareTwoStrings(
                 book.publisher,
                 this.given.publisher
-              ) > 0.3
+              ) > 0.32
             ) {
               m.push({
                 ...book,
